@@ -10,12 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.40.0",
     "firebase": "^10.12.2",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-helmet-async": "^2.0.5",
     "react-router-dom": "^6.23.1",
     "sort-by": "^1.2.0"
   },
