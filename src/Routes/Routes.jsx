@@ -12,6 +12,10 @@ import UserHome from "../pages/Dashboard/UserHome/UserHome";
 import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
 import AllProperties from "../pages/AllProperties/AllProperties";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import FeaturedProperties from "../pages/Home/FeaturedProperties/FeaturedProperties";
+import Details from "../pages/Details/Details";
+import Wishlist from "../pages/Wishlist/Wishlist";
+import Reviews from "../pages/Reviews/Reviews";
 
 export const router = createBrowserRouter([
   {
@@ -25,27 +29,57 @@ export const router = createBrowserRouter([
       },
 
       {
-        path: "login",
+        path: "/login",
         element: <Login></Login>,
       },
       {
-        path: "/AllProperties",
-        element: 
-        //  <PrivateRoute>
-          <AllProperties></AllProperties>
-            
-        // </PrivateRoute>
-        
-        ,
-      },
-      {
-        path: "signup",
+        path: "/signUp",
         element: <SignUp></SignUp>,
       },
-
-      
+      // {
+      //   path: "/details/:id",
+      //   element: <Details></Details>
+      // },
+      {
+        path: "/featuredProperties",
+        element: <FeaturedProperties></FeaturedProperties>,
+      },
+      {
+        path: "/wishlist",
+        element: (
+          //<PrivateRoute>
+            <Wishlist></Wishlist>
+          //</PrivateRoute>
+        ),
+      },
+      {
+        path: "/reviews",
+        element: (
+          //<PrivateRoute>
+          <Reviews></Reviews>
+            
+          //</PrivateRoute>
+        ),
+      },
+      {
+        path: "/allProperties",
+        element: (
+          <PrivateRoute>
+            <AllProperties></AllProperties>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "details/:id",
+        element: (
+          <PrivateRoute>
+            <Details></Details>
+          </PrivateRoute>
+        ),
+      },
     ],
   },
+
   {
     path: "dashboard",
     element: (
@@ -59,7 +93,11 @@ export const router = createBrowserRouter([
         path: "userHome",
         element: <UserHome></UserHome>,
       },
-      
+      // {
+      //   path: "/userProfile",
+      //   element: <UserHome></UserHome>,
+      // },
+
       {
         path: "adminHome",
         element: (
@@ -68,7 +106,7 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
-     
+
       {
         path: "users",
         element: (

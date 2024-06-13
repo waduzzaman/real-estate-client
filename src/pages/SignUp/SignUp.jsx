@@ -29,7 +29,8 @@ const SignUp = () => {
             name: data.name,
             email: data.email,
           };
-          axiosPublic.post("/users", userInfo).then((res) => {
+          // axiosPublic.post("/users", userInfo).then((res) => {
+          axiosPublic.post('/users', userInfo).then((res) => {
             if (res.data.insertedId) {
               console.log("user added to the database");
               reset();
@@ -51,20 +52,19 @@ const SignUp = () => {
   return (
     <>
       <Helmet>
-        <title>Bistro Boss | Sign Up</title>
+        <title> RealEstate | Sign Up</title>
       </Helmet>
-      <p className="text-7xl">this is login page</p>
-      <div className="hero min-h-screen bg-base-200">
 
-        <div className="hero-content flex flex-col lg:flex-row-reverse items-center justify-between w-full lg:w-2/3 ">
-          <div className="text-center lg:text-left bg-emerald-800 text-white flex-1 p-8 py-56 rounded-lg ">
+      <div className="hero min-h-screen bg-base-200">
+        <div className="hero-content flex flex-col lg:flex-row-reverse items-center justify-between w-full lg:w-2/3 mt-72">
+          <div className="text-center lg:text-left bg-emerald-800 text-white flex-1 p-8 py-64 rounded-lg ">
             <h1 className="text-5xl font-bold">Sign up now!</h1>
             <p className="py-6">
               Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
               excepturi exercitationem quasi.
             </p>
           </div>
-          <div className="card flex-shrink-0 w-full lg:w-1/2 max-w-lg shadow-2xl bg-black text-white flex-1 p-6 p">
+          <div className="card flex-shrink-0 w-full lg:w-1/2 max-w-lg shadow-2xl bg-black text-white flex-1 p-4">
             <form onSubmit={handleSubmit(onSubmit)} className="card-body">
               <div className="form-control">
                 <label className="label">

@@ -2,6 +2,8 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
 import useAdmin from "../../../hooks/useAdmin";
+import Weather from "../../../components/Weather/Weather";
+import DateTime from "../../../components/DateTime/DateTime";
 
 const NavBar = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -19,7 +21,16 @@ const NavBar = () => {
         <Link to="/">Home</Link>
       </li>
       <li>
-        <Link to="/AllProperties">All Properties</Link>
+        <Link to="/allProperties">All Properties</Link>
+      </li>
+      <li>
+        <Link to="/wishlist">Wishlist</Link>
+      </li>
+      {/* <li>
+        <Link to="/property">Details</Link>
+      </li> */}
+      <li>
+        <Link to="/reviews">Reviews</Link>
       </li>
 
       {user && isAdmin && (
@@ -32,11 +43,11 @@ const NavBar = () => {
           <Link to="/dashboard/userHome">Dashboard</Link>
         </li>
       )}
-      <li>
+      {/* <li>
         <Link to="/dashboard/">
           <button className="">Dashboard</button>
         </Link>
-      </li>
+      </li> */}
       {user ? (
         <>
           <span>{user?.displayName}</span>
@@ -92,8 +103,9 @@ const NavBar = () => {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{navOptions}</ul>
         </div>
-        <div className="navbar-end">
-          <a className="btn">Get started</a>
+        <div className="navbar-end mr-10">
+          <DateTime></DateTime>
+          <Weather></Weather>
         </div>
       </div>
     </>

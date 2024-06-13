@@ -2,11 +2,11 @@ import { FaAd, FaBook, FaCalendar, FaEnvelope, FaHome, FaList, FaSearch, FaShopp
 import { NavLink, Outlet } from "react-router-dom";
 // import useCart from "../hooks/useCart";
 import useAdmin from "../hooks/useAdmin";
+import { FaUser } from "react-icons/fa6";
 
 
 const Dashboard = () => {
-    const [cart] = useCart();
-
+   
     // TODO: get isAdmin value from the database
     const [isAdmin] = useAdmin();
 
@@ -51,26 +51,33 @@ const Dashboard = () => {
                                         User Home</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to="/dashboard/history">
-                                        <FaCalendar></FaCalendar>
-                                        Not History</NavLink>
+                                    <NavLink to="/dashboard/myProfile">
+                                       <FaUser></FaUser>
+                                        My Profile</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to="/dashboard/cart">
-                                        <FaShoppingCart></FaShoppingCart>
-                                        My Cart ({cart.length})</NavLink>
+                                    <NavLink to="/dashboard/wishlist">
+                                       <FaList></FaList>
+                                        Wishlist</NavLink>
                                 </li>
+                                <li>
+                                    <NavLink to="/dashboard/propertyBought ">
+                                        <FaCalendar></FaCalendar>
+                                        Property Bought</NavLink>
+                                </li>
+                              
                                 <li>
                                     <NavLink to="/dashboard/review">
                                         <FaAd></FaAd>
                                         Add a Review</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to="/dashboard/paymentHistory">
+                                    <NavLink to="/dashboard/myReviews">
                                         <FaList></FaList>
-                                        Real Payment History</NavLink>
+                                        My Reviews</NavLink>
                                 </li>
                             </>
+                            
                     }
                     {/* shared nav links */}
                     <div className="divider"></div>
@@ -78,12 +85,7 @@ const Dashboard = () => {
                         <NavLink to="/">
                             <FaHome></FaHome>
                             Home</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/order/salad">
-                            <FaSearch></FaSearch>
-                            Menu</NavLink>
-                    </li>
+                    </li>                  
                     <li>
                         <NavLink to="/order/contact">
                             <FaEnvelope></FaEnvelope>

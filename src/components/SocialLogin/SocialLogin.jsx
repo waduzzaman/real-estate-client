@@ -1,4 +1,4 @@
-import { FaGoogle } from "react-icons/fa";
+// import { FaGoogle } from "react-icons/fa";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { useNavigate } from "react-router-dom";
@@ -19,19 +19,22 @@ const SocialLogin = () => {
             }
             axiosPublic.post('/users', userInfo)
             .then(res =>{
-                console.log(res.data);
+                (res.data);
                 navigate('/');
             })
         })
     }
 
     return (
-        <div className="p-8">
+        <div className="px-5">
             <div className="divider"></div>
             <div>
-                <button onClick={handleGoogleSignIn} className="btn">
-                    <FaGoogle className="mr-2"></FaGoogle>
+
+                <button onClick={handleGoogleSignIn} className="btn w-full gap-10 flex text-xl">
+             
+                    <img src="/src/assets/google.png" alt=""className="w-8" />
                     Google
+                   
                 </button>
             </div>
         </div>

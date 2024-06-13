@@ -15,7 +15,9 @@ const Testimonials = () => {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                setReviews(data);
+                // Sort reviews by date and take the latest 3
+                const latestReviews = data.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
+                setReviews(latestReviews);
             } catch (error) {
                 console.error('There was a problem with the fetch operation:', error);
             }
@@ -36,7 +38,7 @@ const Testimonials = () => {
     return (
         <section className="my-20">
             <SectionTitle
-                subHeading="User Reviews"
+                subHeading="Latest User Reviews"
                 heading="Testimonials"
             />
             <div className="relative overflow-hidden">
@@ -46,17 +48,23 @@ const Testimonials = () => {
                 >
                     {"<"}
                 </button>
-                <div ref={containerRef} className="flex overflow-x-auto space-x-8 mx-4 md:mx-24 my-16 scrollbar-hide">
+                <div ref={containerRef} className="flex overflow-x-auto space-x-8 px-4 md:px-24 py-16 scrollbar-hide">
                     {reviews.map(review => (
-                        <div key={review._id} className="flex-shrink-0 w-72 p-6 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105">
+                        <div key={review._id} className="flex-shrink-0 w-80 p-6 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105">
                             <div className="flex flex-col items-center">
+                                <h3 className="text-xl font-semibold text-gray-900">{review.name}</h3>
+                                <img
+                                    src={review.reviewerImage}
+                                    alt={review.name}
+                                    className="w-16 h-16 rounded-full object-cover mb-4"
+                                />
                                 <Rating
                                     style={{ maxWidth: 180 }}
                                     value={review.rating}
                                     readOnly
                                 />
-                                <p className="py-8 text-center text-gray-700">{review.details}</p>
-                                <h3 className="text-2xl font-semibold text-orange-500">{review.name}</h3>
+                                <p className="py-4 text-center text-gray-700">{review.details}</p>
+                                <p className="text-sm text-gray-500">{review.property}</p>
                             </div>
                         </div>
                     ))}
