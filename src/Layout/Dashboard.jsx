@@ -1,4 +1,4 @@
-import { FaAd, FaBook, FaCalendar, FaEnvelope, FaHome, FaList, FaSearch, FaShoppingCart, FaUsers, FaUtensils } from "react-icons/fa";
+import { FaAd, FaBook, FaCalendar, FaEnvelope, FaHome, FaList, FaSearch,  FaUsers, FaUtensils } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
 // import useCart from "../hooks/useCart";
 import useAdmin from "../hooks/useAdmin";
@@ -7,7 +7,8 @@ import { FaUser } from "react-icons/fa6";
 
 const Dashboard = () => {
    
-    // TODO: get isAdmin value from the database
+    // Check if there is admin
+
     const [isAdmin] = useAdmin();
 
     return (
@@ -18,33 +19,30 @@ const Dashboard = () => {
                     {
                         isAdmin ? <>
                             <li>
-                                <NavLink to="/dashboard/adminHome">
+                                <NavLink to="/dashboard/adminProfile">
                                     <FaHome></FaHome>
-                                    Admin Home</NavLink>
+                                    Admin Profile</NavLink>
                             </li>
                             <li>
-                                <NavLink to="/dashboard/addItems">
+                                <NavLink to="/dashboard/manageProperties">
                                     <FaUtensils></FaUtensils>
-                                    Add Items</NavLink>
+                                    Manage Properties</NavLink>
                             </li>
-                            <li>
-                                <NavLink to="/dashboard/manageItems">
-                                    <FaList></FaList>
-                                    Manage Items</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dashboard/bookings">
-                                    <FaBook></FaBook>
-                                    Manage Bookings</NavLink>
-                            </li>
+                           
                             <li>
                                 <NavLink to="/dashboard/users">
+                                    <FaBook></FaBook>
+                                    Manage Users</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/manageReviews">
                                     <FaUsers></FaUsers>
-                                    All Users</NavLink>
+                                    Manage Reviews</NavLink>
                             </li>
                         </>
                             :
                             <>
+                            {/* Normal user Routes */}
                                 <li>
                                     <NavLink to="/dashboard/userHome">
                                         <FaHome></FaHome>
@@ -57,26 +55,30 @@ const Dashboard = () => {
                                 </li>
                                 <li>
                                     <NavLink to="/dashboard/wishlist">
-                                       <FaList></FaList>
-                                        Wishlist</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/dashboard/propertyBought ">
-                                        <FaCalendar></FaCalendar>
-                                        Property Bought</NavLink>
+                                       <FaUser></FaUser>
+                                        WishList</NavLink>
                                 </li>
                               
                                 <li>
-                                    <NavLink to="/dashboard/review">
-                                        <FaAd></FaAd>
-                                        Add a Review</NavLink>
-                                </li>
+                                    <NavLink to="/dashboard/propertyBought">
+                                        <FaCalendar></FaCalendar>
+                                        Property Bought</NavLink>
+                                </li>                              
+                               
                                 <li>
-                                    <NavLink to="/dashboard/myReviews">
+                                    <NavLink to="/dashboard/reviews">
                                         <FaList></FaList>
                                         My Reviews</NavLink>
                                 </li>
+                                {/* <li>
+                                    <NavLink to="/dashboard/users">
+                                        <FaList></FaList>
+                                        All Users</NavLink>
+                                </li> */}
+
+                                
                             </>
+                            
                             
                     }
                     {/* shared nav links */}

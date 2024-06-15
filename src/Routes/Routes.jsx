@@ -16,6 +16,9 @@ import FeaturedProperties from "../pages/Home/FeaturedProperties/FeaturedPropert
 import Details from "../pages/Details/Details";
 import Wishlist from "../pages/Wishlist/Wishlist";
 import Reviews from "../pages/Reviews/Reviews";
+import UserProfile from "../pages/Dashboard/UserProfile/UserProfile";
+import PropertyBought from "../pages/Dashboard/PropertyBougth/PropertyBought";
+import AdminProfile from "../pages/Dashboard/AdminProfile/AdminProfile";
 
 export const router = createBrowserRouter([
   {
@@ -48,7 +51,7 @@ export const router = createBrowserRouter([
         path: "/wishlist",
         element: (
           //<PrivateRoute>
-            <Wishlist></Wishlist>
+          <Wishlist></Wishlist>
           //</PrivateRoute>
         ),
       },
@@ -57,7 +60,7 @@ export const router = createBrowserRouter([
         element: (
           //<PrivateRoute>
           <Reviews></Reviews>
-            
+
           //</PrivateRoute>
         ),
       },
@@ -93,11 +96,30 @@ export const router = createBrowserRouter([
         path: "userHome",
         element: <UserHome></UserHome>,
       },
-      // {
-      //   path: "/userProfile",
-      //   element: <UserHome></UserHome>,
-      // },
+      {
+        path: "myProfile",
+        element: <UserProfile></UserProfile>,
+      },
+      {
+        path: "wishlist",
+        element: <Wishlist></Wishlist>,
+      },
+      {
+        path: "propertyBought",
+        element: <PropertyBought></PropertyBought>,
+      },
+      {
+        path: "reviews",
+        element: <Reviews></Reviews>,
+      },
 
+      // Agent only routes
+
+      
+
+
+
+      // admin only routes
       {
         path: "adminHome",
         element: (
@@ -106,7 +128,27 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
-
+   
+      {
+        path: "adminProfile",
+        element: (
+          <AdminRoute>
+            <AdminProfile></AdminProfile>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "updateItem/:id",
+        element: (
+          <AdminRoute>
+            <UpdateItem></UpdateItem>
+          </AdminRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(
+            `https://bistro-boss-server-seven-sage.vercel.app/menu/${params.id}`
+          ),
+      },
       {
         path: "users",
         element: (
@@ -115,6 +157,14 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
+      // {
+      //   path: "users",
+      //   element: (
+      //     <AdminRoute>
+      //       <AllUsers></AllUsers>
+      //     </AdminRoute>
+      //   ),
+      // },
     ],
   },
 ]);
