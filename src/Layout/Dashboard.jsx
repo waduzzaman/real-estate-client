@@ -1,106 +1,135 @@
-import { FaAd, FaBook, FaCalendar, FaEnvelope, FaHome, FaList, FaSearch,  FaUsers, FaUtensils } from "react-icons/fa";
-import { NavLink, Outlet } from "react-router-dom";
-// import useCart from "../hooks/useCart";
-import useAdmin from "../hooks/useAdmin";
-import { FaUser } from "react-icons/fa6";
 
+import React from 'react';
+import { NavLink, Outlet } from 'react-router-dom';
+import useAdmin from '../hooks/useAdmin';
+import useAgent from '../hooks/useAgent';
+import { FaUser, FaHome, FaBook, FaCalendar, FaUsers, FaUtensils, FaList, FaEnvelope } from 'react-icons/fa';
 
 const Dashboard = () => {
-   
-    // Check if there is admin
-
-    const [isAdmin] = useAdmin();
+    const [isAdmin] = useAdmin(); // Custom hook to check if user is admin
+    const [isAgent] = useAgent(); // Custom hook to check if user is agent
 
     return (
         <div className="flex">
-            {/* dashboard side bar */}
             <div className="w-64 min-h-screen bg-orange-400">
                 <ul className="menu p-4">
-                    {
-                        isAdmin ? <>
+                    {isAdmin && (
+                        <>
                             <li>
-                                <NavLink to="/dashboard/adminProfile">
-                                    <FaHome></FaHome>
-                                    Admin Profile</NavLink>
+                                <NavLink to="/dashboard/adminHome">
+                                    <FaHome /> Admin Profile
+                                </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/dashboard/manageProperties">
-                                    <FaUtensils></FaUtensils>
-                                    Manage Properties</NavLink>
+                                    <FaUtensils /> Manage Properties
+                                </NavLink>
                             </li>
-                           
                             <li>
-                                <NavLink to="/dashboard/users">
-                                    <FaBook></FaBook>
-                                    Manage Users</NavLink>
+                                <NavLink to="/dashboard/manageUsers">
+                                    <FaBook /> Manage Users
+                                </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/dashboard/manageReviews">
-                                    <FaUsers></FaUsers>
-                                    Manage Reviews</NavLink>
+                                    <FaUsers /> Manage Reviews
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/allUsers">
+                                    <FaUsers /> All Users
+                                </NavLink>
                             </li>
                         </>
-                            :
-                            <>
-                            {/* Normal user Routes */}
-                                <li>
-                                    <NavLink to="/dashboard/userHome">
-                                        <FaHome></FaHome>
-                                        User Home</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/dashboard/myProfile">
-                                       <FaUser></FaUser>
-                                        My Profile</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/dashboard/wishlist">
-                                       <FaUser></FaUser>
-                                        WishList</NavLink>
-                                </li>
-                              
-                                <li>
-                                    <NavLink to="/dashboard/propertyBought">
-                                        <FaCalendar></FaCalendar>
-                                        Property Bought</NavLink>
-                                </li>                              
-                               
-                                <li>
-                                    <NavLink to="/dashboard/reviews">
-                                        <FaList></FaList>
-                                        My Reviews</NavLink>
-                                </li>
-                                {/* <li>
-                                    <NavLink to="/dashboard/users">
-                                        <FaList></FaList>
-                                        All Users</NavLink>
-                                </li> */}
-
-                                
-                            </>
-                            
-                            
-                    }
-                    {/* shared nav links */}
+                    )}
+                    {isAgent && (
+                        <>
+                            <li>
+                                <NavLink to="/dashboard/agentHome">
+                                    <FaBook /> Agent Profile
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/addProperty">
+                                    <FaBook /> Add Property
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/myAddedProperties">
+                                    <FaBook /> My Added Properties
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/mySoldProperties">
+                                    <FaBook /> My Sold Properties
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/requestedProperties">
+                                    <FaBook /> Requested Properties
+                                </NavLink>
+                            </li>
+                        </>
+                    )}
+                    {!isAdmin && !isAgent && (
+                        <>
+                            <li>
+                                <NavLink to="/dashboard/user/userHome">
+                                    <FaHome /> User Home
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/myProfile">
+                                    <FaUser /> My Profile
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/wishlist">
+                                    <FaUser /> Wishlist
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/userWishlist">
+                                    <FaUser /> User Wishlist
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/propertyBought">
+                                    <FaCalendar /> Property Bought
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/reviews">
+                                    <FaList /> My Reviews
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/allUsers">
+                                    <FaList /> All Users
+                                </NavLink>
+                            </li>
+                        </>
+                    )}
                     <div className="divider"></div>
                     <li>
                         <NavLink to="/">
-                            <FaHome></FaHome>
-                            Home</NavLink>
-                    </li>                  
+                            <FaHome /> Home
+                        </NavLink>
+                    </li>
                     <li>
-                        <NavLink to="/order/contact">
-                            <FaEnvelope></FaEnvelope>
-                            Contact</NavLink>
+                        <NavLink to="/">
+                            <FaEnvelope /> Contact
+                        </NavLink>
                     </li>
                 </ul>
             </div>
-            {/* dashboard content */}
             <div className="flex-1 p-8">
-                <Outlet></Outlet>
+                <Outlet />
             </div>
         </div>
     );
 };
 
 export default Dashboard;
+
+

@@ -4,10 +4,12 @@ import { AuthContext } from "../../../providers/AuthProvider";
 import useAdmin from "../../../hooks/useAdmin";
 import Weather from "../../../components/Weather/Weather";
 import DateTime from "../../../components/DateTime/DateTime";
+import useAgent from "../../../hooks/useAgent";
 
 const NavBar = () => {
   const { user, logOut } = useContext(AuthContext);
   const [isAdmin] = useAdmin();
+  const [isAgent] = useAgent();
 
   const handleLogOut = () => {
     logOut()
@@ -38,19 +40,20 @@ const NavBar = () => {
           <Link to="/dashboard/adminHome">Dashboard</Link>
         </li>
       )}
+          {user && isAgent && (
+        <li>
+          <Link to="/dashboard/agentHome">Dashboard</Link>
+        </li>
+      )}
       {user && !isAdmin && (
         <li>
           <Link to="/dashboard/userHome">Dashboard</Link>
         </li>
-      )}
-      {/* <li>
-        <Link to="/dashboard/">
-          <button className="">Dashboard</button>
-        </Link>
-      </li> */}
+      )}  
+   
       {user ? (
         <>
-          <span>{user?.displayName}</span>
+          {/* <span>{user?.displayName}</span> */}
           <button onClick={handleLogOut} className="btn btn-ghost">
             LogOut
           </button>

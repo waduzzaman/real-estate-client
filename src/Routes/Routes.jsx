@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Main from "../Layout/Main";
 import Home from "../pages/Home/Home/Home";
-
 import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
 import PrivateRoute from "./PrivateRoute";
@@ -17,154 +16,208 @@ import Details from "../pages/Details/Details";
 import Wishlist from "../pages/Wishlist/Wishlist";
 import Reviews from "../pages/Reviews/Reviews";
 import UserProfile from "../pages/Dashboard/UserProfile/UserProfile";
-import PropertyBought from "../pages/Dashboard/PropertyBougth/PropertyBought";
+
 import AdminProfile from "../pages/Dashboard/AdminProfile/AdminProfile";
+import AgentProfile from "../pages/Dashboard/AgentProfile/AgentProfile";
+import AddProperty from "../pages/Dashboard/AddProperty/AddProperty";
+import MyAddedProperties from "../pages/Dashboard/MyAddedProperties/MyAddedProperties";
+import MySoldProperties from "../pages/Dashboard/MySoldProperties/MySoldProperties";
+import RequestedProperties from "../pages/Dashboard/RequestedProperties/RequestedProperties";
+import ManageProperties from "../pages/Dashboard/ManageProperties/ManageProperties";
+import ManageUsers from "../pages/Dashboard/ManageUsers/ManageUsers";
+import ManageReviews from "../pages/Dashboard/ManageReviews/ManageReviews";
+import AgentRoute from "./AgentRoute";
+import PropertyBought from "../pages/Dashboard/PropertyBougth/PropertyBought";
+import UserWishlist from "../pages/Dashboard/UserWishlist/UserWishlist";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Main></Main>,
+    element: <Main />,
     errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
-        element: <Home></Home>,
+        element: <Home />,
       },
-
       {
         path: "/login",
-        element: <Login></Login>,
+        element: <Login />,
       },
       {
         path: "/signUp",
-        element: <SignUp></SignUp>,
+        element: <SignUp />,
       },
-      // {
-      //   path: "/details/:id",
-      //   element: <Details></Details>
-      // },
       {
         path: "/featuredProperties",
-        element: <FeaturedProperties></FeaturedProperties>,
+        element: <FeaturedProperties />,
       },
       {
         path: "/wishlist",
         element: (
-          //<PrivateRoute>
-          <Wishlist></Wishlist>
-          //</PrivateRoute>
+          <PrivateRoute>
+            <Wishlist />
+          </PrivateRoute>
         ),
       },
       {
         path: "/reviews",
         element: (
-          //<PrivateRoute>
-          <Reviews></Reviews>
-
-          //</PrivateRoute>
+          <PrivateRoute>
+            <Reviews />
+          </PrivateRoute>
         ),
       },
       {
         path: "/allProperties",
         element: (
           <PrivateRoute>
-            <AllProperties></AllProperties>
+            <AllProperties />
           </PrivateRoute>
         ),
       },
       {
-        path: "details/:id",
+        path: "/details/:id",
         element: (
           <PrivateRoute>
-            <Details></Details>
+            <Details />
           </PrivateRoute>
         ),
       },
     ],
   },
-
   {
     path: "dashboard",
     element: (
       <PrivateRoute>
-        <Dashboard></Dashboard>
+        <Dashboard />
       </PrivateRoute>
     ),
     children: [
-      // normal user routes
       {
-        path: "userHome",
-        element: <UserHome></UserHome>,
+        path: "user/userHome",
+        element: <UserHome />,
       },
       {
         path: "myProfile",
-        element: <UserProfile></UserProfile>,
+        element: <UserProfile />,
       },
       {
         path: "wishlist",
-        element: <Wishlist></Wishlist>,
+        element: <Wishlist />,
+      },
+      {
+        path: "userWishlist",
+        element: <UserWishlist/>,
       },
       {
         path: "propertyBought",
-        element: <PropertyBought></PropertyBought>,
+        element: <PropertyBought />,
       },
       {
         path: "reviews",
-        element: <Reviews></Reviews>,
+        element: <Reviews />,
       },
-
-      // Agent only routes
-
-      
-
-
-
-      // admin only routes
+      {
+        path: "allUsers",
+        element: (
+          // <AdminRoute>
+            <AllUsers />
+          // </AdminRoute>
+        ),
+      },
+      {
+        path: "users",
+        element: <AllUsers />,
+      },
+      {
+        path: "agentProfile",
+        element: (
+          <AgentRoute>
+            <AgentProfile />
+          </AgentRoute>
+        ),
+      },
+      {
+        path: "addProperty",
+        element: (
+          <AgentRoute>
+            <AddProperty />
+          </AgentRoute>
+        ),
+      },
+      {
+        path: "myAddedProperties",
+        element: (
+          <AgentRoute>
+            <MyAddedProperties />
+          </AgentRoute>
+        ),
+      },
+      {
+        path: "mySoldProperties",
+        element: (
+          <AgentRoute>
+            <MySoldProperties />
+          </AgentRoute>
+        ),
+      },
+      {
+        path: "requestedProperties",
+        element: (
+          <AgentRoute>
+            <RequestedProperties />
+          </AgentRoute>
+        ),
+      },
       {
         path: "adminHome",
         element: (
           <AdminRoute>
-            <AdminHome></AdminHome>
+            <AdminHome />
           </AdminRoute>
         ),
       },
-   
       {
         path: "adminProfile",
         element: (
           <AdminRoute>
-            <AdminProfile></AdminProfile>
+            <AdminProfile />
           </AdminRoute>
         ),
       },
       {
-        path: "updateItem/:id",
+        path: "manageProperties",
         element: (
           <AdminRoute>
-            <UpdateItem></UpdateItem>
+            <ManageProperties />
           </AdminRoute>
         ),
-        loader: ({ params }) =>
-          fetch(
-            `https://bistro-boss-server-seven-sage.vercel.app/menu/${params.id}`
-          ),
       },
       {
-        path: "users",
+        path: "manageUsers",
         element: (
           <AdminRoute>
-            <AllUsers></AllUsers>
+            <ManageUsers />
           </AdminRoute>
         ),
       },
-      // {
-      //   path: "users",
-      //   element: (
-      //     <AdminRoute>
-      //       <AllUsers></AllUsers>
-      //     </AdminRoute>
-      //   ),
-      // },
+      {
+        path: "manageReviews",
+        element: (
+          <AdminRoute>
+            <ManageReviews />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "allUsers",
+        element: (
+          <AdminRoute>
+            <AllUsers />
+          </AdminRoute>
+        ),
+      },
     ],
   },
 ]);
