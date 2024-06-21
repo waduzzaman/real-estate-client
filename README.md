@@ -7,7 +7,7 @@ Welcome to the RealEstate platform! This is a comprehensive solution for managin
 - **Password**: SuperAdmin@123
 
 ## Live Site URL
-[RealEstate Platform](https://yourlivesiteurl.com)
+[RealEstate Management](https://real-estate-client-b69c6.web.app/)
 
 ## Features of the RealEstate Platform
 
@@ -73,6 +73,6 @@ Welcome to the RealEstate platform! This is a comprehensive solution for managin
 - firebase
 - swiper
 - sweetalert2
--swiper
+- swiper
 - recaptha 
 
