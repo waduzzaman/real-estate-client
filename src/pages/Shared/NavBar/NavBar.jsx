@@ -37,23 +37,25 @@ const NavBar = () => {
 
       {user && isAdmin && (
         <li>
-          <Link to="/dashboard/adminHome">Dashboard</Link>
+          <Link to="/dashboard/adminProfile">Dashboard</Link>
         </li>
       )}
-          {user && isAgent && (
+      {user && isAgent && (
         <li>
-          <Link to="/dashboard/agentHome">Dashboard</Link>
+          <Link to="/dashboard/agentProfile">Dashboard</Link>
         </li>
       )}
       {user && !isAdmin && (
         <li>
-          <Link to="/dashboard/userHome">Dashboard</Link>
+          <Link to="/dashboard/userProfile">Dashboard</Link>
         </li>
-      )}  
-   
+      )}
+
       {user ? (
         <>
-          {/* <span>{user?.displayName}</span> */}
+        {/* <span><img src={user.userImage} alt="User" className="user-image" /></span> */}
+          <span>{user?.displayName}</span>
+         
           <button onClick={handleLogOut} className="btn btn-ghost">
             LogOut
           </button>

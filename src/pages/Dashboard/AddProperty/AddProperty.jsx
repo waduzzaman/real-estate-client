@@ -1,41 +1,28 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { useForm } from 'react-hook-form';
+import useAxiosPublic from '../../../hooks/useAxiosPublic';
 
 const AddProperty = ({ agentDisplayName, agentEmail }) => {
-  const [propertyTitle, setPropertyTitle] = useState('');
-  const [propertyLocation, setPropertyLocation] = useState('');
-  const [propertyImage, setPropertyImage] = useState('');
-  const [priceRange, setPriceRange] = useState('');
+  const { register, handleSubmit, reset } = useForm();
   const [errorMessage, setErrorMessage] = useState('');
+  const axiosPublic = useAxiosPublic();
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPropertyImage(reader.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const onSubmit = async (data) => {
     const newProperty = {
-      title: propertyTitle,
-      location: propertyLocation,
-      image: propertyImage,
+      title: data.propertyTitle,
+      location: data.propertyLocation,
+      image: data.propertyImage,
+      bedNumber: data.bedNumber ? parseInt(data.bedNumber, 10) : null,
+      bathNumber: data.bathNumber ? parseInt(data.bathNumber, 10) : null,
       agentName: agentDisplayName,
       agentEmail: agentEmail,
-      priceRange: priceRange,
+      price: data.price ? parseInt(data.price, 10) : null,
     };
 
     try {
-      const response = await axios.post('/properties', newProperty);
-      console.log(response.data); 
-      setPropertyTitle('');
-      setPropertyLocation('');
-      setPropertyImage('');
-      setPriceRange('');
+      const response = await axiosPublic.post('/properties', newProperty);
+      console.log(response.data);
+      reset(); // Reset the form fields
       setErrorMessage('');
     } catch (error) {
       console.error('Error adding property:', error);
@@ -44,30 +31,52 @@ const AddProperty = ({ agentDisplayName, agentEmail }) => {
   };
 
   return (
-    <div>
-      <h2>Add Property</h2>
-      <form onSubmit={handleSubmit}>
-        <label>Property Title:</label>
-        <input type="text" value={propertyTitle} onChange={(e) => setPropertyTitle(e.target.value)} required />
+    <div className="max-w-xl mx-auto bg-white p-6 rounded-md shadow-md">
+      <h2 className="text-2xl font-semibold mb-6">Add Property</h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-4">
+          <label htmlFor="propertyTitle" className="block text-sm font-medium text-gray-700">Property Title:</label>
+          <input type="text" id="propertyTitle" {...register('propertyTitle', { required: true })} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500" />
+        </div>
 
-        <label>Property Location:</label>
-        <input type="text" value={propertyLocation} onChange={(e) => setPropertyLocation(e.target.value)} required />
+        <div className="mb-4">
+          <label htmlFor="propertyLocation" className="block text-sm font-medium text-gray-700">Property Location:</label>
+          <input type="text" id="propertyLocation" {...register('propertyLocation', { required: true })} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500" />
+        </div>
 
-        <label>Property Image:</label>
-        <input type="file" onChange={handleImageChange} accept="image/*" required />
+        <div className="mb-4">
+          <label htmlFor="propertyImage" className="block text-sm font-medium text-gray-700">Property Image URL:</label>
+          <input type="text" id="propertyImage" {...register('propertyImage', { required: true })} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500" />
+        </div>
 
-        <label>Agent Name:</label>
-        <input type="text" value={agentDisplayName} readOnly />
+        <div className="mb-4">
+          <label htmlFor="bedNumber" className="block text-sm font-medium text-gray-700">Bed Number:</label>
+          <input type="number" id="bedNumber" {...register('bedNumber')} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500" />
+        </div>
 
-        <label>Agent Email:</label>
-        <input type="email" value={agentEmail} readOnly />
+        <div className="mb-4">
+          <label htmlFor="bathNumber" className="block text-sm font-medium text-gray-700">Bath Number:</label>
+          <input type="number" id="bathNumber" {...register('bathNumber')} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500" />
+        </div>
 
-        <label>Price Range:</label>
-        <input type="text" value={priceRange} onChange={(e) => setPriceRange(e.target.value)} required />
+        <div className="mb-4">
+          <label htmlFor="agentName" className="block text-sm font-medium text-gray-700">Agent Name:</label>
+          <input type="text" id="agentName" value={agentDisplayName} readOnly className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500" />
+        </div>
 
-        <button type="submit">Add Property</button>
+        <div className="mb-4">
+          <label htmlFor="agentEmail" className="block text-sm font-medium text-gray-700">Agent Email:</label>
+          <input type="email" id="agentEmail" value={agentEmail} readOnly className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500" />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price:</label>
+          <input type="number" id="price" {...register('price', { required: true })} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500" />
+        </div>
+
+        <button type="submit" className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200">Add Property</button>
       </form>
-      {errorMessage && <p>{errorMessage}</p>}
+      {errorMessage && <p className="text-red-500 mt-4">{errorMessage}</p>}
     </div>
   );
 };

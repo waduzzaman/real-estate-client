@@ -1,32 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Assuming you use axios for HTTP requests
-import { useParams } from 'react-router-dom'; // For getting propertyId from URL params
+
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const MakeOfferForm = () => {
-  const { propertyId } = useParams(); // Get propertyId from URL params
+  const { propertyId } = useParams(); // Retrieve propertyId from URL
   const [property, setProperty] = useState({});
   const [offeredAmount, setOfferedAmount] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    // Fetch property details by propertyId from backend (replace with your API endpoint)
-    axios.get(`http://localhost:5000/properties/${propertyId}`)
-      .then(response => {
+    console.log("Property ID from URL:", propertyId); // Log propertyId
+
+    const fetchProperty = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/properties/${propertyId}`);
+        console.log("Property Data:", response.data); // Log response data
         setProperty(response.data);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching property details:', error);
-      });
+      }
+    };
+    
+    if (propertyId) {
+      fetchProperty();
+    }
   }, [propertyId]);
 
   const handleOfferSubmit = async (e) => {
     e.preventDefault();
-    // Validate offered amount against property price range
+    
     if (offeredAmount < property.minPrice || offeredAmount > property.maxPrice) {
       setErrorMessage('Offered amount must be within the property price range.');
       return;
     }
-    // Prepare offer data to send to backend
+    
     const offerData = {
       propertyId,
       offeredAmount,
@@ -35,37 +43,46 @@ const MakeOfferForm = () => {
       buyingDate: new Date().toISOString(),
       status: 'pending'
     };
+
     try {
-      // Send offer data to backend (replace with your API endpoint)
       const response = await axios.post('http://localhost:5000/offers', offerData);
-      console.log(response.data); // Assuming backend returns success message
-      // Redirect or show success message
+      console.log('Offer Response:', response.data); // Log offer response
+      // Handle success: redirect or show success message
     } catch (error) {
       console.error('Error making offer:', error);
     }
   };
 
   return (
-    <div>
-      <h2>Make an Offer</h2>
-      <form onSubmit={handleOfferSubmit}>
-        <label>Property Title:</label>
-        <input type="text" value={property.title} readOnly />
-
-        <label>Property Location:</label>
-        <input type="text" value={property.location} readOnly />
-
-        <label>Agent Name:</label>
-        <input type="text" value={property.agentName} readOnly />
-
-        <label>Offered Amount:</label>
-        <input type="number" value={offeredAmount} onChange={(e) => setOfferedAmount(e.target.value)} required />
-
-        <input type="submit" value="Make Offer" />
-      </form>
-      {errorMessage && <p>{errorMessage}</p>}
+    <div className="container mx-auto px-4 py-8">
+      <h2 className="text-2xl font-bold mb-4">Make an Offer</h2>
+      <div className="bg-white shadow-md rounded-lg p-6">
+        <form onSubmit={handleOfferSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="propertyTitle" className="block text-sm font-medium text-gray-700">Property Title</label>
+            <input id="propertyTitle" type="text" value={property.title || ''} readOnly className="form-input mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label htmlFor="propertyLocation" className="block text-sm font-medium text-gray-700">Property Location</label>
+            <input id="propertyLocation" type="text" value={property.location || ''} readOnly className="form-input mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label htmlFor="agentName" className="block text-sm font-medium text-gray-700">Agent Name</label>
+            <input id="agentName" type="text" value={property.agentName || ''} readOnly className="form-input mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label htmlFor="offeredAmount" className="block text-sm font-medium text-gray-700">Offered Amount</label>
+            <input id="offeredAmount" type="number" value={offeredAmount} onChange={(e) => setOfferedAmount(e.target.value)} required className="form-input mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500" />
+          </div>
+          <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            Make Offer
+          </button>
+        </form>
+        {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
+      </div>
     </div>
   );
 };
 
 export default MakeOfferForm;
+

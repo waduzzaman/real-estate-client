@@ -14,7 +14,7 @@ const useAgent = () => {
                 return false;
             }
             try {
-                const res = await axiosSecure.get(`/users/agent/${user.email}`);
+                const res = await axiosSecure.get(`/users/${user.email}`);
                 return res.data?.agent || false;
             } catch (error) {
                 console.error('Error fetching agent status:', error);

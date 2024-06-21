@@ -38,7 +38,7 @@ const Testimonials = () => {
     return (
         <section className="my-20">
             <SectionTitle
-                subHeading="Latest User Reviews"
+                subHeading="Latest Testimonials"
                 heading="Testimonials"
             />
             <div className="relative overflow-hidden">

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import SectionTitle from '../../../components/SectionTitle/SectionTitle';
 import useFeaturedProperties from '../../../hooks/useFeaturedProperties';
+import { Link } from 'react-router-dom';
 
 
 const FeaturedProperties = () => {
@@ -32,9 +33,9 @@ const FeaturedProperties = () => {
                             <h3 className="text-xl font-semibold mb-2">{property.title}</h3>
                             <p className="text-gray-600 mb-2">{property.location}</p>
                             <p className="text-gray-600 mb-2">{property.shortDescription}</p>
-                            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                View Details
-                            </button>
+                            <Link className="btn btn-primary mt-4" to={`/details/${property._id}`}>
+                Details
+              </Link>
                         </div>
                     </div>
                 ))}

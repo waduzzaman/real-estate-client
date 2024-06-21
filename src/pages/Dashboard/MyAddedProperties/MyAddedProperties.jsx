@@ -1,23 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import useAgent from '../../../hooks/useAgent';
+// Adjust the import path as necessary
 
-const MyAddedProperties = ({ agentEmail }) => {
+const MyAddedProperties = () => {
   const [properties, setProperties] = useState([]);
-  const history = useHistory();
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const [isAgent, isAgentLoading] = useAgent();
 
   useEffect(() => {
     const fetchProperties = async () => {
+      if (!isAgent) return;
+
       try {
         const response = await axios.get(`/properties/agent/${agentEmail}`);
-        setProperties(response.data);
+        if (Array.isArray(response.data)) {
+          setProperties(response.data);
+        } else {
+          throw new Error('Unexpected response format');
+        }
       } catch (error) {
         console.error('Error fetching properties:', error);
+        setError('Failed to fetch properties');
       }
     };
 
     fetchProperties();
-  }, [agentEmail]);
+  }, [isAgent]);
 
   const handleDelete = async (id) => {
     try {
@@ -25,12 +36,33 @@ const MyAddedProperties = ({ agentEmail }) => {
       setProperties(properties.filter((property) => property._id !== id));
     } catch (error) {
       console.error('Error deleting property:', error);
+      setError('Failed to delete property');
     }
   };
 
   const handleUpdate = (id) => {
-    history.push(`/update-property/${id}`);
+    navigate(`/update-property/${id}`);
   };
+
+  if (isAgentLoading) {
+    return <div className="p-4 text-center text-gray-600">Loading...</div>;
+  }
+
+  if (!isAgent) {
+    return (
+      <div className="p-4 text-center text-red-500">
+        You are not authorized to view this page.
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 text-center text-red-500">
+        {error}
+      </div>
+    );
+  }
 
   return (
     <div className="p-4">

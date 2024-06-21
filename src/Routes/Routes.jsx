@@ -7,16 +7,13 @@ import PrivateRoute from "./PrivateRoute";
 import Dashboard from "../Layout/Dashboard";
 import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
 import AdminRoute from "./AdminRoute";
-import UserHome from "../pages/Dashboard/UserHome/UserHome";
-import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
 import AllProperties from "../pages/AllProperties/AllProperties";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import FeaturedProperties from "../pages/Home/FeaturedProperties/FeaturedProperties";
 import Details from "../pages/Details/Details";
-import Wishlist from "../pages/Wishlist/Wishlist";
+import Wishlist from "../pages/Dashboard/Wishlist/Wishlist";
 import Reviews from "../pages/Reviews/Reviews";
 import UserProfile from "../pages/Dashboard/UserProfile/UserProfile";
-
 import AdminProfile from "../pages/Dashboard/AdminProfile/AdminProfile";
 import AgentProfile from "../pages/Dashboard/AgentProfile/AgentProfile";
 import AddProperty from "../pages/Dashboard/AddProperty/AddProperty";
@@ -28,7 +25,8 @@ import ManageUsers from "../pages/Dashboard/ManageUsers/ManageUsers";
 import ManageReviews from "../pages/Dashboard/ManageReviews/ManageReviews";
 import AgentRoute from "./AgentRoute";
 import PropertyBought from "../pages/Dashboard/PropertyBougth/PropertyBought";
-import UserWishlist from "../pages/Dashboard/UserWishlist/UserWishlist";
+import MakeOfferForm from "../pages/Dashboard/MakeOfferForm/MakeOfferForm";
+
 
 export const router = createBrowserRouter([
   {
@@ -94,22 +92,24 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
+
+      // user related routes 
+    
       {
-        path: "user/userHome",
-        element: <UserHome />,
-      },
-      {
-        path: "myProfile",
+        path: "userProfile",
         element: <UserProfile />,
       },
       {
         path: "wishlist",
         element: <Wishlist />,
       },
+   
+
       {
-        path: "userWishlist",
-        element: <UserWishlist/>,
+        path:"wishlist/makeAnOffer/:propertyId",
+        element: <MakeOfferForm/>,
       },
+     
       {
         path: "propertyBought",
         element: <PropertyBought />,
@@ -130,6 +130,38 @@ export const router = createBrowserRouter([
         path: "users",
         element: <AllUsers />,
       },
+      {
+        path: "manageProperties",
+        element: <ManageProperties/>,
+      },
+
+      {
+        path: "addProperty",
+        element: (
+          // <AgentRoute>
+            <AddProperty />
+          // </AgentRoute>
+        ),
+      },
+      {
+        path: "myAddedProperties/:id",
+        element: (
+          // <AgentRoute>
+            <MyAddedProperties/>
+          // </AgentRoute>
+        ),
+      },
+
+      {
+        path: "mySoldProperties",
+        element: (
+          // <AgentRoute>
+            <MySoldProperties />
+          // </AgentRoute>
+        ),
+      },
+
+      // Agent Related Routes
       {
         path: "agentProfile",
         element: (
@@ -170,14 +202,9 @@ export const router = createBrowserRouter([
           </AgentRoute>
         ),
       },
-      {
-        path: "adminHome",
-        element: (
-          <AdminRoute>
-            <AdminHome />
-          </AdminRoute>
-        ),
-      },
+
+      // Admin Related Routes
+     
       {
         path: "adminProfile",
         element: (

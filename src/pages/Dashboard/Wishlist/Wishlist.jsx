@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
-import useAuth from "../../hooks/useAuth";
-import SectionTitle from "../../components/SectionTitle/SectionTitle";
+
+import  { useState, useEffect } from "react";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import useAuth from "../../../hooks/useAuth";
+import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 import Swal from "sweetalert2";
 
 const Wishlist = () => {
@@ -40,7 +42,6 @@ const Wishlist = () => {
 
     fetchWishlistItems();
   }, [user, axiosPublic]);
-
 
   const handleDelete = async (propertyId) => {
     // Show confirmation dialog
@@ -101,7 +102,7 @@ const Wishlist = () => {
   return (
     <div className="container mx-auto py-12 px-4 md:px-8 lg:px-16 mb-36">
       <div className="mb-4 mt-20 text-center font-bold">
-        <SectionTitle subHeading="Your Favorite Properties" heading="Wishlist" />
+        <SectionTitle subHeading="MayFavorite Properties" heading="Wishlist" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -123,11 +124,17 @@ const Wishlist = () => {
             <p className="text-gray-700">
               <strong>Agent:</strong> {property.agentName}
             </p>
+            
             <button 
               onClick={() => handleDelete(property._id)} 
               className="mt-4 bg-red-500 text-white py-2 px-4 w-full">
               Remove from Wishlist
             </button>
+            <Link 
+              to={`makeAnOffer/${property._id}`} 
+              className="mt-4 bg-blue-500 text-white py-2 px-4 w-full block text-center">
+              Make An Offer
+            </Link>
           </div>
         ))}
       </div>
@@ -136,3 +143,4 @@ const Wishlist = () => {
 };
 
 export default Wishlist;
+

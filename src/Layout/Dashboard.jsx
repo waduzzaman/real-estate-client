@@ -3,7 +3,9 @@ import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import useAdmin from '../hooks/useAdmin';
 import useAgent from '../hooks/useAgent';
-import { FaUser, FaHome, FaBook, FaCalendar, FaUsers, FaUtensils, FaList, FaEnvelope } from 'react-icons/fa';
+import { FaUser, FaHome, FaBook, FaCalendar, FaUsers, FaUtensils, FaList, FaEnvelope, FaMoneyBill, FaReact, FaEdit } from 'react-icons/fa';
+import { MdOutlineRateReview, MdOutlineReviews } from 'react-icons/md';
+import { FaHouseChimneyUser } from 'react-icons/fa6';
 
 const Dashboard = () => {
     const [isAdmin] = useAdmin(); // Custom hook to check if user is admin
@@ -13,10 +15,12 @@ const Dashboard = () => {
         <div className="flex">
             <div className="w-64 min-h-screen bg-orange-400">
                 <ul className="menu p-4">
+
+                    {/* Admin Nav Item */}
                     {isAdmin && (
                         <>
                             <li>
-                                <NavLink to="/dashboard/adminHome">
+                                <NavLink to="/dashboard/adminProfile">
                                     <FaHome /> Admin Profile
                                 </NavLink>
                             </li>
@@ -42,10 +46,12 @@ const Dashboard = () => {
                             </li>
                         </>
                     )}
+
+                    {/* Agent Nav Items */}
                     {isAgent && (
                         <>
                             <li>
-                                <NavLink to="/dashboard/agentHome">
+                                <NavLink to="/dashboard/agentProfile">
                                     <FaBook /> Agent Profile
                                 </NavLink>
                             </li>
@@ -71,28 +77,27 @@ const Dashboard = () => {
                             </li>
                         </>
                     )}
+
+                    {/* User Nav items */}
                     {!isAdmin && !isAgent && (
                         <>
+                          
                             <li>
-                                <NavLink to="/dashboard/user/userHome">
-                                    <FaHome /> User Home
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dashboard/myProfile">
+                                <NavLink to="/dashboard/userProfile">
                                     <FaUser /> My Profile
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/dashboard/wishlist">
-                                    <FaUser /> Wishlist
+                                    <FaList /> Wishlist
                                 </NavLink>
                             </li>
-                            <li>
-                                <NavLink to="/dashboard/userWishlist">
-                                    <FaUser /> User Wishlist
+                            {/* <li>
+                                <NavLink to="/dashboard/makeAnOffer">
+                                    <FaMoneyBill /> Make An Offer
                                 </NavLink>
-                            </li>
+                            </li> */}
+                            
                             <li>
                                 <NavLink to="/dashboard/propertyBought">
                                     <FaCalendar /> Property Bought
@@ -100,12 +105,32 @@ const Dashboard = () => {
                             </li>
                             <li>
                                 <NavLink to="/dashboard/reviews">
-                                    <FaList /> My Reviews
+                                <MdOutlineReviews /> My Reviews
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/dashboard/allUsers">
-                                    <FaList /> All Users
+                                    <FaUsers /> All Users
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/addProperty">
+                                    <FaHome /> Add Property
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/myAddedProperties">
+                                <FaHouseChimneyUser /> My Added Properties
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/mySoldProperties">
+                                    <FaHome /> My Sold Properties
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/manageProperties">
+                                    <FaEdit /> Manage Properties
                                 </NavLink>
                             </li>
                         </>

@@ -1,30 +1,33 @@
-import React, { useEffect, useState } from 'react';
+
+import  { useEffect, useState } from 'react';
 import axios from 'axios';
 import useAuth from '../../../hooks/useAuth';
-import useAdmin from '../../../hooks/useAdmin';
 
 const ManageProperties = () => {
   const { currentUser } = useAuth();
-  const [isAdmin, isAdminLoading] = useAdmin();
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await axios.get('/properties'); // Adjust the endpoint according to your backend
-        setProperties(response.data);
+        const response = await axios.get('/properties'); 
+        if (Array.isArray(response.data)) {
+          setProperties(response.data);
+        } else {
+          throw new Error("Unexpected response format");
+        }
         setLoading(false);
       } catch (error) {
         console.error('Error fetching properties:', error);
+        setError(error);
         setLoading(false);
       }
     };
 
-    if (currentUser && isAdmin) {
-      fetchProperties();
-    }
-  }, [currentUser, isAdmin]);
+    fetchProperties();
+  }, [currentUser]);
 
   const handleVerify = async (propertyId) => {
     try {
@@ -48,12 +51,27 @@ const ManageProperties = () => {
     }
   };
 
-  if (!currentUser || !isAdmin || isAdminLoading) {
-    return null;
-  }
+  const handleDelete = async (propertyId) => {
+    try {
+      await axios.delete(`/properties/${propertyId}`);
+      setProperties(properties.filter(property => property._id !== propertyId));
+    } catch (error) {
+      console.error('Error deleting property:', error);
+    }
+  };
+
+  const handleUpdate = (propertyId) => {
+    // Redirect to the update page or open a modal with the update form
+    // For simplicity, we'll use an alert here
+    alert(`Update property with ID: ${propertyId}`);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
   }
 
   return (
@@ -89,13 +107,25 @@ const ManageProperties = () => {
                       Verify
                     </button>
                     <button 
-                      className="bg-red-500 text-white px-4 py-1 rounded"
+                      className="bg-red-500 text-white px-4 py-1 rounded mr-2"
                       onClick={() => handleReject(property._id)}
                     >
                       Reject
                     </button>
                   </>
                 )}
+                <button 
+                  className="bg-blue-500 text-white px-4 py-1 rounded mr-2"
+                  onClick={() => handleUpdate(property._id)}
+                >
+                  Update
+                </button>
+                <button 
+                  className="bg-gray-500 text-white px-4 py-1 rounded"
+                  onClick={() => handleDelete(property._id)}
+                >
+                  Delete
+                </button>
               </td>
               <td className="py-2">
                 {property.status}
@@ -109,3 +139,4 @@ const ManageProperties = () => {
 };
 
 export default ManageProperties;
+
