@@ -10,7 +10,7 @@ const Testimonials = () => {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const response = await fetch('https://bistro-boss-server-seven-sage.vercel.app/reviews');
+                const response = await fetch('http://localhost:5000/testimonials');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }

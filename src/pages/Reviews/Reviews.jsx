@@ -121,7 +121,7 @@ const Reviews = () => {
               {property && (
                 <>
                   
-                  <img src={property.image} alt={property.title} className="mb-4 rounded-lg" />
+                  {/* <img src={property.image} alt={property.title} className="mb-4 rounded-lg" /> */}
                   <p className="text-gray-700 text-2xl font-bold my-2">{property.title}</p>
                 
                   <p className="text-gray-700"><span className="font-bold"> Agent:</span> {property.agentName}</p>
