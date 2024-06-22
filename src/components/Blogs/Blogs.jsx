@@ -7,7 +7,7 @@ const Blogs = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/blogs");  
+        const response = await fetch("https://real-estate-server-mu.vercel.app/blogs");  
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }

@@ -32,7 +32,7 @@ const Details = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/wishlist", {
+      const response = await fetch("https://real-estate-server-mu.vercel.app/wishlist", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

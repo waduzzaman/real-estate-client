@@ -1,6 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { FaTrashAlt, FaUsers } from "react-icons/fa";
-import Swal from "sweetalert2";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import useAuth from "../../../hooks/useAuth"; // Assuming this hook provides the logged-in user's information
 

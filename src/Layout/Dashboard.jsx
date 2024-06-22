@@ -1,19 +1,21 @@
 
-import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import useAdmin from '../hooks/useAdmin';
 import useAgent from '../hooks/useAgent';
-import { FaUser, FaHome, FaBook, FaCalendar, FaUsers, FaUtensils, FaList, FaEnvelope, FaMoneyBill, FaReact, FaEdit } from 'react-icons/fa';
-import { MdOutlineRateReview, MdOutlineReviews } from 'react-icons/md';
-import { FaHouseChimneyUser } from 'react-icons/fa6';
+import { FaUser, FaHome, FaBook, FaCalendar, FaUsers, FaUtensils, FaList, FaEnvelope, FaMoneyBill, FaEdit,  FaFirstOrder } from 'react-icons/fa';
+import {  MdOutlineReviews } from 'react-icons/md';
+import { FaHouse, FaHouseChimneyUser } from 'react-icons/fa6';
 
 const Dashboard = () => {
     const [isAdmin] = useAdmin(); // Custom hook to check if user is admin
     const [isAgent] = useAgent(); // Custom hook to check if user is agent
+    // console.log(isAdmin);
 
     return (
         <div className="flex">
-            <div className="w-64 min-h-screen bg-orange-400">
+            
+            <div className="w-64 min-h-screen bg-emerald-400">
+            <img className='w-20 p-2' src="/margel-logo.jpeg" alt="" />
                 <ul className="menu p-4">
 
                     {/* Admin Nav Item */}
@@ -21,29 +23,30 @@ const Dashboard = () => {
                         <>
                             <li>
                                 <NavLink to="/dashboard/adminProfile">
-                                    <FaHome /> Admin Profile
+                                
+                                    <FaUser /> Admin Profile
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/dashboard/manageProperties">
-                                    <FaUtensils /> Manage Properties
+                                    <FaHouse /> Manage Properties
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/dashboard/manageUsers">
-                                    <FaBook /> Manage Users
+                                    <FaUsers /> Manage Users
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/dashboard/manageReviews">
-                                    <FaUsers /> Manage Reviews
+                                    <FaEdit /> Manage Reviews
                                 </NavLink>
                             </li>
-                            <li>
+                            {/* <li>
                                 <NavLink to="/dashboard/allUsers">
                                     <FaUsers /> All Users
                                 </NavLink>
-                            </li>
+                            </li> */}
                         </>
                     )}
 
@@ -52,27 +55,27 @@ const Dashboard = () => {
                         <>
                             <li>
                                 <NavLink to="/dashboard/agentProfile">
-                                    <FaBook /> Agent Profile
+                                    <FaUser /> Agent Profile
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/dashboard/addProperty">
-                                    <FaBook /> Add Property
+                                    <FaHouse /> Add Property
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/dashboard/myAddedProperties">
-                                    <FaBook /> My Added Properties
+                                    <FaHome /> My Added Properties
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/dashboard/mySoldProperties">
-                                    <FaBook /> My Sold Properties
+                                    <FaMoneyBill /> My Sold Properties
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/dashboard/requestedProperties">
-                                    <FaBook /> Requested Properties
+                                    <FaFirstOrder /> Requested Properties
                                 </NavLink>
                             </li>
                         </>
@@ -103,36 +106,15 @@ const Dashboard = () => {
                                     <FaCalendar /> Property Bought
                                 </NavLink>
                             </li>
+
                             <li>
                                 <NavLink to="/dashboard/reviews">
                                 <MdOutlineReviews /> My Reviews
                                 </NavLink>
                             </li>
-                            <li>
-                                <NavLink to="/dashboard/allUsers">
-                                    <FaUsers /> All Users
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dashboard/addProperty">
-                                    <FaHome /> Add Property
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dashboard/myAddedProperties">
-                                <FaHouseChimneyUser /> My Added Properties
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dashboard/mySoldProperties">
-                                    <FaHome /> My Sold Properties
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dashboard/manageProperties">
-                                    <FaEdit /> Manage Properties
-                                </NavLink>
-                            </li>
+                           
+                            
+                            
                         </>
                     )}
                     <div className="divider"></div>
@@ -148,7 +130,7 @@ const Dashboard = () => {
                     </li>
                 </ul>
             </div>
-            <div className="flex-1 p-8">
+            <div className="flex-1 p-10 bg-gray-50">
                 <Outlet />
             </div>
         </div>

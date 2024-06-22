@@ -14,7 +14,7 @@ const MakeOfferForm = () => {
 
     const fetchProperty = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/properties/${propertyId}`);
+        const response = await axios.get(`https://real-estate-server-mu.vercel.app/properties/${propertyId}`);
         console.log("Property Data:", response.data); // Log response data
         setProperty(response.data);
       } catch (error) {
@@ -45,7 +45,7 @@ const MakeOfferForm = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:5000/offers', offerData);
+      const response = await axios.post('https://real-estate-server-mu.vercel.app/offers', offerData);
       console.log('Offer Response:', response.data); // Log offer response
       // Handle success: redirect or show success message
     } catch (error) {

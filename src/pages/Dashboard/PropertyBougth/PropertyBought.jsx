@@ -1,7 +1,7 @@
+
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
-
+import { Link } from 'react-router-dom';
 
 const PropertyBought = () => {
   const [offers, setOffers] = useState([]);
@@ -10,12 +10,12 @@ const PropertyBought = () => {
   useEffect(() => {
     const fetchOffersAndProperties = async () => {
       try {
-        const offersResponse = await axios.get('http://localhost:5000/offers');
+        const offersResponse = await axios.get('https://real-estate-server-mu.vercel.app/offers');
         const offersData = offersResponse.data;
 
         // Fetch property details for each offer
-        const propertyPromises = offersData.map((offers) =>
-          axios.get(`http://localhost:5000/properties/${offers.propertyId}`)
+        const propertyPromises = offersData.map((offer) =>
+          axios.get(`https://real-estate-server-mu.vercel.app/properties/${offer.propertyId}`)
         );
 
         const propertyResponses = await Promise.all(propertyPromises);
@@ -34,17 +34,13 @@ const PropertyBought = () => {
     fetchOffersAndProperties();
   }, []);
 
-  const handlePay = (offerId) => {
-    // Navigate to payment page with offer details via URL parameters
-    window.location.href = `/payment/${offerId}`;
-  };
-
   return (
     <div>
       <h2>Properties You have Offered For</h2>
       <div className="property-list">
         {offers.map((offer) => {
           const property = properties[offer.propertyId];
+          console.log('Offer Status:', offer.status); 
           return (
             <div key={offer._id} className="property-card">
               {property && (
@@ -58,7 +54,9 @@ const PropertyBought = () => {
               <p>Offered Amount: ${offer.offeredAmount}</p>
               <p>Status: {offer.status}</p>
               {offer.status === 'accepted' && (
-                <button onClick={() => handlePay(offer._id)}>Pay</button>
+                <Link to={`dashboard/payment/${offer._id}`} className="btn btn-secondary bg-blue-600">
+                  Pay
+                </Link>
               )}
               {offer.status === 'bought' && (
                 <p>Transaction ID: {offer.transactionId}</p>
@@ -72,3 +70,4 @@ const PropertyBought = () => {
 };
 
 export default PropertyBought;
+

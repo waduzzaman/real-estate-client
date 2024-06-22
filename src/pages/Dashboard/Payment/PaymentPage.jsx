@@ -2,18 +2,19 @@ import{ useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import SectionTitle from '../../../components/SectionTitle/SectionTitle';
 
-const PaymentPage = () => {
+const Payment = () => {
   const location = useLocation();
   const { offer } = location.state;
 
   const handlePayment = async () => {
     try {
-      // Simulate payment process and get transaction ID
-      const transactionId = 'dummy-transaction-id'; // Replace with actual payment process
+   
+      const transactionId = 'dummy-transaction-id'; 
 
       // Update offer status to 'bought'
-      await axios.patch(`http://localhost:5000/offers/${offer._id}/status`, {
+      await axios.patch(`https://real-estate-server-mu.vercel.app/offers/${offer._id}/status`, {
         status: 'bought',
         transactionId
       });
@@ -38,6 +39,7 @@ const PaymentPage = () => {
 
   return (
     <div>
+      <SectionTitle heading='Payment' subHeading='Please pay to buy'></SectionTitle>
       <h2>Payment for {offer.property.title}</h2>
       <p>Amount: ${offer.offeredAmount}</p>
       <button onClick={handlePayment}>Complete Payment</button>
@@ -45,4 +47,4 @@ const PaymentPage = () => {
   );
 };
 
-export default PaymentPage;
+export default Payment;

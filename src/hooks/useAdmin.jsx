@@ -14,9 +14,10 @@ const useAdmin = () => {
             // Check if user is available before making the request
             if (!user?.email) return false;
             const res = await axiosSecure.get(`/users/admin/${user.email}`);
+            console.log(res.data);
             return res.data?.admin;
         },
-        // Optionally, retry or refetch configurations can be added here
+        
     });
 
     return [isAdmin, isAdminLoading];

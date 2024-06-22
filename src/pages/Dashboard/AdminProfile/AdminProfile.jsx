@@ -1,61 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import useAxiosPublic from '../../../hooks/useAxiosPublic';
-import useAuth from '../../../hooks/useAuth';
-import useAdmin from '../../../hooks/useAdmin';
+
+import { useQuery } from "@tanstack/react-query";
+import useAuth from "../../../hooks/useAuth"; 
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const AdminProfile = () => {
-  const { currentUser } = useAuth(); 
-  const axiosInstance = useAxiosPublic();
-  const [adminInfo, setAdminInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [isAdmin, isAdminLoading] = useAdmin();
+    const axiosSecure = useAxiosSecure();
+    const { user } = useAuth(); 
 
-  useEffect(() => {
-    const fetchAdminInfo = async () => {
-      try {
-        const response = await axiosInstance.get(`/users/${currentUser.email}`);
-        setAdminInfo(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching admin profile:', error);
-        setLoading(false);
-      }
-    };
+    const { data: users = [] } = useQuery({
+        queryKey: ['users'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/users');
+            return res.data;
 
-    if (currentUser && isAdmin) {
-      fetchAdminInfo();
-    }
-  }, [axiosInstance, currentUser, isAdmin]);
+           
+        }
+    });
 
-  if (!currentUser || !isAdmin) {
-    return null;
-  }
+    // Filter users to find the logged-in user's profile
+    const loggedInUser = users.find(u => u.email === user.email);
+    // console.log(loggedInUser.photoURL);
 
-  if (loading || isAdminLoading) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-4">Admin Profile</h2>
-      {adminInfo ? (
-        <div className="flex items-center space-x-4">
-          <img
-            src={adminInfo.userImage || defaultUserImage}
-            alt="User"
-            className="w-20 h-20 rounded-full object-cover"
-          />
-          <div>
-            <p className="font-bold">{adminInfo.userName}</p>
-            <p className="text-gray-600">Role: {adminInfo.role}</p>
-            {/* Add other relevant information */}
-          </div>
+    return (
+        <div>
+            <div className="flex justify-evenly my-4">
+                <h2 className="text-3xl capitalize font-semibold ">Admin Profile</h2>
+            </div>
+            {loggedInUser ? (
+                <div className="p-4 border rounded shadow">
+                    <img src={loggedInUser.photoURL} alt={loggedInUser.name} className="w-24 h-24 p-2 rounded-full mx-auto" />
+                    <h3 className="text-xl font-bold mt-2">Name: {loggedInUser.name}</h3>
+                    <p>Email: {loggedInUser.email}</p>
+                    <p>Role: {loggedInUser.role}</p>
+                </div>
+            ) : (
+                <p>No user profile found.</p>
+            )}
         </div>
-      ) : (
-        <p>No profile information available.</p>
-      )}
-    </div>
-  );
+    );
 };
 
 export default AdminProfile;
+

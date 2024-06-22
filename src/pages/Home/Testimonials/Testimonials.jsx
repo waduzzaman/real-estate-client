@@ -10,7 +10,7 @@ const Testimonials = () => {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const response = await fetch('http://localhost:5000/testimonials');
+                const response = await fetch('https://real-estate-server-mu.vercel.app/testimonials');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }

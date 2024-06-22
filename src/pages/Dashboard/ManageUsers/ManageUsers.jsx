@@ -1,142 +1,150 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import useAuth from '../../../hooks/useAuth';
-import useAdmin from '../../../hooks/useAdmin';
+
+import { useQuery } from "@tanstack/react-query";
+import { FaTrashAlt } from "react-icons/fa";
+import Swal from "sweetalert2";
+// import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ManageUsers = () => {
-  const { currentUser } = useAuth();
-  const [isAdmin, isAdminLoading] = useAdmin();
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const axiosSecure = useAxiosSecure();
+  const { data: users = [], refetch } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/users");
+      return res.data;
+    },
+  });
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get('/users'); // Adjust the endpoint according to your backend
-        setUsers(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-        setLoading(false);
+  const handleChangeRole = (user, role) => {
+    axiosSecure
+      .patch(`/users/${user._id}/role`, { role })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.modifiedCount > 0) {
+          refetch();
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: `${user.name} is now a ${role}!`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      })
+      .catch((error) => {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Error changing role",
+          text: error.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      });
+  };
+
+  const handleDeleteUser = (user) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure
+          .delete(`/users/${user._id}`)
+          .then((res) => {
+            if (res.data.deletedCount > 0) {
+              refetch();
+              Swal.fire({
+                title: "Deleted!",
+                text: "User has been deleted.",
+                icon: "success",
+              });
+            } else {
+              Swal.fire({
+                title: "Failed to delete",
+                text: "User deletion failed.",
+                icon: "error",
+              });
+            }
+          })
+          .catch((error) => {
+            Swal.fire({
+              title: "Error",
+              text: "Failed to delete user.",
+              icon: "error",
+            });
+            console.error("Error deleting user:", error);
+          });
       }
-    };
-
-    if (currentUser && isAdmin) {
-      fetchUsers();
-    }
-  }, [currentUser, isAdmin]);
-
-  const handleMakeAdmin = async (userId) => {
-    try {
-      await axios.patch(`/users/${userId}/role`, { role: 'admin' });
-      setUsers(users.map(user =>
-        user._id === userId ? { ...user, role: 'admin' } : user
-      ));
-    } catch (error) {
-      console.error('Error making admin:', error);
-    }
+    });
   };
-
-  const handleMakeAgent = async (userId) => {
-    try {
-      await axios.patch(`/users/${userId}/role`, { role: 'agent' });
-      setUsers(users.map(user =>
-        user._id === userId ? { ...user, role: 'agent' } : user
-      ));
-    } catch (error) {
-      console.error('Error making agent:', error);
-    }
-  };
-
-  const handleMarkAsFraud = async (userId) => {
-    try {
-      await axios.patch(`/users/${userId}/role`, { role: 'fraud' });
-      setUsers(users.map(user =>
-        user._id === userId ? { ...user, role: 'fraud' } : user
-      ));
-      await axios.delete(`/properties/agent/${userId}`); // Adjust the endpoint to delete properties by agent
-    } catch (error) {
-      console.error('Error marking as fraud:', error);
-    }
-  };
-
-  const handleDeleteUser = async (userId) => {
-    try {
-      await axios.delete(`/users/${userId}`);
-      setUsers(users.filter(user => user._id !== userId));
-    } catch (error) {
-      console.error('Error deleting user:', error);
-    }
-  };
-
-  if (!currentUser || !isAdmin || isAdminLoading) {
-    return null;
-  }
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-4">Manage Users</h2>
-      <table className="min-w-full bg-white">
-        <thead>
-          <tr>
-            <th className="py-2">User Name</th>
-            <th className="py-2">User Email</th>
-            <th className="py-2">Actions</th>
-            <th className="py-2">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(user => (
-            <tr key={user._id} className="border-t">
-              <td className="py-2">{user.name}</td>
-              <td className="py-2">{user.email}</td>
-              <td className="py-2">
-                {user.role !== 'fraud' && (
-                  <>
-                    <button 
-                      className="bg-blue-500 text-white px-4 py-1 rounded mr-2"
-                      onClick={() => handleMakeAdmin(user._id)}
-                      disabled={user.role === 'admin'}
+    <div>
+      <div className="flex justify-evenly my-4">
+        <h2 className="text-3xl">All Users</h2>
+        <h2 className="text-3xl">Total Users: {users.length}</h2>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="table table-zebra w-full">
+          {/* head */}
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user, index) => (
+              <tr key={user._id}>
+                <th>{index + 1}</th>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.role}</td>
+                <td>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => handleChangeRole(user, "admin")}
+                      className="btn btn-sm bg-blue-500"
                     >
                       Make Admin
                     </button>
-                    <button 
-                      className="bg-green-500 text-white px-4 py-1 rounded mr-2"
-                      onClick={() => handleMakeAgent(user._id)}
-                      disabled={user.role === 'agent'}
+                    <button
+                      onClick={() => handleChangeRole(user, "agent")}
+                      className="btn btn-sm bg-green-500"
                     >
                       Make Agent
                     </button>
-                    {user.role === 'agent' && (
-                      <button 
-                        className="bg-red-500 text-white px-4 py-1 rounded mr-2"
-                        onClick={() => handleMarkAsFraud(user._id)}
-                      >
-                        Mark as Fraud
-                      </button>
-                    )}
-                  </>
-                )}
-                <button 
-                  className="bg-red-500 text-white px-4 py-1 rounded"
-                  onClick={() => handleDeleteUser(user._id)}
-                >
-                  Delete User
-                </button>
-              </td>
-              <td className="py-2">
-                {user.role}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                    <button
+                      onClick={() => handleChangeRole(user, "user")}
+                      className="btn btn-sm bg-purple-500"
+                    >
+                      Make User
+                    </button>
+                    <button
+                      onClick={() => handleDeleteUser(user)}
+                      className="btn btn-ghost btn-sm"
+                    >
+                      <FaTrashAlt className="text-red-600"></FaTrashAlt>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
 
 export default ManageUsers;
+

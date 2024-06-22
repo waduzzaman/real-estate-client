@@ -17,5 +17,5 @@ const AgentRoute = ({ children }) => {
 
     return <Navigate to="/" state={{ from: location }} replace></Navigate>
 };
-
 export default AgentRoute;
+

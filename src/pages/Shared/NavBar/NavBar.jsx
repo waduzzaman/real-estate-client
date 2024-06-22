@@ -40,7 +40,7 @@ const NavBar = () => {
           <Link to="/dashboard/adminProfile">Dashboard</Link>
         </li>
       )}
-      {user && isAgent && (
+      {user && isAgent &&  (
         <li>
           <Link to="/dashboard/agentProfile">Dashboard</Link>
         </li>
