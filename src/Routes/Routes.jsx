@@ -18,8 +18,6 @@ import AdminProfile from "../pages/Dashboard/AdminProfile/AdminProfile";
 import AgentProfile from "../pages/Dashboard/AgentProfile/AgentProfile";
 import AddProperty from "../pages/Dashboard/AddProperty/AddProperty";
 
-
-
 import MySoldProperties from "../pages/Dashboard/MySoldProperties/MySoldProperties";
 import RequestedProperties from "../pages/Dashboard/RequestedProperties/RequestedProperties";
 import ManageProperties from "../pages/Dashboard/ManageProperties/ManageProperties";
@@ -54,6 +52,10 @@ export const router = createBrowserRouter([
       {
         path: "/featuredProperties",
         element: <FeaturedProperties />,
+      },
+      {
+        path: "makeAnOffer",
+        element: <MakeOfferForm />,
       },
       {
         path: "/wishlist",
@@ -110,7 +112,7 @@ export const router = createBrowserRouter([
       },
 
       {
-        path: "wishlist/makeAnOffer/:propertyId",
+        path: "makeAnOffer",
         element: <MakeOfferForm />,
       },
 

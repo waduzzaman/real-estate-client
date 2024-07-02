@@ -1,69 +1,78 @@
 
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import useAxiosPublic from '../../../hooks/useAxiosPublic';
+
 
 const PropertyBought = () => {
   const [offers, setOffers] = useState([]);
-  const [properties, setProperties] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const axiosPublic = useAxiosPublic();
 
   useEffect(() => {
-    const fetchOffersAndProperties = async () => {
+    const fetchOffers = async () => {
       try {
-        const offersResponse = await axios.get('https://real-estate-server-mu.vercel.app/offers');
-        const offersData = offersResponse.data;
+        const response = await axiosPublic.get('/offers');
+        const offersData = response.data;
 
         // Fetch property details for each offer
-        const propertyPromises = offersData.map((offer) =>
-          axios.get(`https://real-estate-server-mu.vercel.app/properties/${offer.propertyId}`)
-        );
+        const propertyDetailsPromises = offersData.map(async (offer) => {
+          if (offer.propertyId) {
+            const propertyResponse = await axiosPublic.get(`/properties/${offer.propertyId}`);
+            return { ...offer, property: propertyResponse.data };
+          }
+          return offer;
+        });
 
-        const propertyResponses = await Promise.all(propertyPromises);
-        const propertiesData = propertyResponses.reduce((acc, response) => {
-          acc[response.data._id] = response.data;
-          return acc;
-        }, {});
-
-        setOffers(offersData);
-        setProperties(propertiesData);
+        const offersWithProperties = await Promise.all(propertyDetailsPromises);
+        setOffers(offersWithProperties);
       } catch (error) {
-        console.error('Error fetching offers or properties:', error);
+        setError('Failed to fetch offers');
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchOffersAndProperties();
-  }, []);
+    fetchOffers();
+  }, [axiosPublic]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!offers || offers.length === 0) {
+    return <div>No offers found.</div>;
+  }
 
   return (
-    <div>
-      <h2>Properties You have Offered For</h2>
-      <div className="property-list">
-        {offers.map((offer) => {
-          const property = properties[offer.propertyId];
-          console.log('Offer Status:', offer.status); 
-          return (
-            <div key={offer._id} className="property-card">
-              {property && (
-                <>
-                  <img src={property.image} alt={property.title} />
-                  <h3>{property.title}</h3>
-                  <p>Location: {property.location}</p>
-                  <p>Agent Name: {property.agentName}</p>
-                </>
-              )}
-              <p>Offered Amount: ${offer.offeredAmount}</p>
-              <p>Status: {offer.status}</p>
-              {offer.status === 'accepted' && (
-                <Link to={`dashboard/payment/${offer._id}`} className="btn btn-secondary bg-blue-600">
-                  Pay
-                </Link>
-              )}
-              {offer.status === 'bought' && (
-                <p>Transaction ID: {offer.transactionId}</p>
-              )}
-            </div>
-          );
-        })}
+    <div className="container mx-auto py-12 px-4 md:px-8 lg:px-16 mb-36">
+      <h2 className="text-2xl font-bold mb-4">Properties Bought</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {offers.map((offer) => (
+          <div key={offer._id} className="border rounded-lg p-4 shadow-lg">
+            {offer.property && (
+              <>
+                <h3 className="text-xl font-semibold">{offer.property.title}</h3>
+                <img src={offer.property.image} alt={offer.property.title} className="w-full h-40 object-cover rounded-md mb-2" />
+                <p className="text-gray-600">Location: {offer.property.location}</p>
+                <p className="text-gray-600">Price: ${offer.property.price}</p>
+                <p className="text-gray-600">Bedrooms: {offer.property.bedNumber}</p>
+                <p className="text-gray-600">Bathrooms: {offer.property.bathNumber}</p>
+              </>
+            )}
+            <p className="text-gray-600 mt-2">Buyer: {offer.buyerName}</p>
+            <p className="text-gray-600">Email: {offer.buyerEmail}</p>
+            <p className="text-gray-600">Officer Amount: ${offer.offeredAmount}</p>
+            <p className="text-gray-600">Date: {new Date(offer.buyingDate).toLocaleDateString()}</p>
+            <p className="text-gray-600">Status: {offer.status}</p>
+           
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -9,6 +9,8 @@ import useAuth from "../../hooks/useAuth";
 import SectionTitle from "../../components/SectionTitle/SectionTitle";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
+import AllReviews from "../Dashboard/Reviews/Reviews";
+
 
 
 const Details = () => {
@@ -40,6 +42,8 @@ const Details = () => {
         },
         body: JSON.stringify({ propertyId: id }), // Convert body to JSON string
       });
+
+
 
       if (response.ok) {
         Swal.fire({
@@ -167,7 +171,7 @@ const Details = () => {
       </div>
 
       <div className="reviews-section mb-12">
-        <h2 className="text-2xl font-bold mb-4 text-center">Reviews</h2>
+        {/* <h2 className="text-2xl font-bold mb-4 text-center">Reviews</h2> */}
         {details.reviews && details.reviews.length > 0 ? (
           details.reviews.map((review, index) => (
             <div
@@ -181,7 +185,7 @@ const Details = () => {
             </div>
           ))
         ) : (
-          <p className="text-center text-gray-600">No reviews yet.</p>
+          <p className="text-center text-gray-600"><AllReviews></AllReviews></p>
         )}
       </div>
       <div className="text-center">

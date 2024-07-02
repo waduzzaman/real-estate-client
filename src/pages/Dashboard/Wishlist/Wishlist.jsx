@@ -1,71 +1,69 @@
-import React, { useState, useEffect } from "react";
-import { AiFillStar } from "react-icons/ai";
-import useAxiosPublic from "../../../hooks/useAxiosPublic";
-import SectionTitle from "../../../components/SectionTitle/SectionTitle";
+import  { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // For navigation
+import useAxiosPublic from '../../../hooks/useAxiosPublic';
 
-const Wishlist = ({ propertyId }) => {
+const UserWishlist = () => {
+  const [wishlist, setWishlist] = useState([]);
   const axiosPublic = useAxiosPublic();
-  const [loading, setLoading] = useState(true);
-  const [wishlistItem, setWishlistItem] = useState(null);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchWishlistItem = async () => {
-      if (!propertyId) return;
+    // Fetch wishlist items from backend (replace with your API endpoint)
+    axiosPublic.get('/wishlist')
+      .then(response => {
+        setWishlist(response.data);
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching wishlist:', error);
+      });
+  }, [axiosPublic]);
 
-      try {
-        const response = await axiosPublic.get(`/wishlist/${propertyId}`);
-        const wishlistData = response.data;
-        setWishlistItem(wishlistData);
-        console.log('wishlist', wishlistData);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWishlistItem();
-  }, [propertyId, axiosPublic]);
-
-
-
-  if (loading) {
-    return <div className="text-center mt-8 text-gray-600">Loading...</div>;
-  }
-
-  if (error) {
-    return (
-      <div className="text-center mt-8 text-gray-600">
-        Error fetching wishlist item: {error}
-      </div>
-    );
-  }
-
-  if (!wishlistItem) {
-    return (
-      <div className="text-center mt-8 text-gray-600">Wishlist item not found.</div>
-    );
-  }
+  const removeFromWishlist = async (propertyId) => {
+    try {
+      const response = await axiosPublic.delete(`/wishlist/${propertyId}`);
+      console.log(response.data); // 
+      // Update wishlist state after deletion
+      setWishlist(wishlist.filter(item => item._id !== propertyId));
+    } catch (error) {
+      console.error('Error removing from wishlist:', error);
+    }
+  };
 
   return (
-    <div className="container mx-auto py-12 px-4 md:px-8 lg:px-16 mb-36">
-      <div className="mb-4 mt-20 text-center font-bold">
-        <SectionTitle subHeading="Wishlist Item Details" heading="Wishlist Item" />
-      </div>
-      <div className="bg-white shadow-md rounded-lg p-4">
-        <p className="text-gray-700 text-2xl font-bold my-2">{wishlistItem.property.title}</p>
-        <p className="text-gray-700"><span className="font-bold">Agent:</span> {wishlistItem.property.agentName}</p>
-        <div className="mt-4 bg-gray-100 p-4 rounded-lg shadow-md">
-          <p className="text-gray-700 mb-2">{wishlistItem.description}</p>
-         
-          <p className="text-gray-500 mt-10 text-end">
-            {new Date(wishlistItem.reviewDate || wishlistItem.date).toLocaleString()}
-          </p>
-        </div>
+    <div className="p-4">
+      <h2 className="text-2xl font-bold mb-4">Wishlist</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {wishlist.map(property => (
+          <div key={property._id} className="border rounded-lg p-4 shadow-lg">
+            <img src={property.image} alt={property.title} className="w-full h-48 object-cover rounded-lg" />
+            <div className="mt-4">
+              <h3 className="text-xl font-semibold">{property.title}</h3>
+              <p className="text-gray-600">Location: {property.location}</p>
+              <p className="text-gray-600">Agent: {property.agentName}</p>
+              <img src={property.agentImage} alt={property.agentName} className="w-12 h-12 rounded-full mt-2" />
+              <p className={`mt-2 ${property.verificationStatus === 'pending' ? 'text-yellow-500' : property.verificationStatus === 'verified' ? 'text-green-500' : 'text-red-500'}`}>
+                Status: {property.verificationStatus}
+              </p>
+              <p className="text-gray-600">Price Range: {property.priceRange}</p>
+              <button
+                onClick={() => removeFromWishlist(property._id)}
+                className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg"
+              >
+                Remove
+              </button>
+              <Link
+                // to={`/makeAnOffer/${property._id}`}
+                to={`/makeAnOffer`}
+                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg ml-2"
+              >
+                Make an Offer
+              </Link>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
-export default Wishlist;
+export default UserWishlist;
