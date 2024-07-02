@@ -2,10 +2,6 @@
 
 Welcome to the RealEstate platform! This is a comprehensive solution for managing real estate properties, featuring functionalities for agents, admins, and users.
 
-## Admin Login
-- **Username**: admin@gmail.com
-- **Password**: SuperAdmin@123
-
 ## Live Site URL
 [RealEstate Management](https://real-estate-client-b69c6.web.app/)
 
@@ -40,15 +36,6 @@ Welcome to the RealEstate platform! This is a comprehensive solution for managin
    - Admin can advertise verified properties.
    - Advertised properties are prominently displayed on the homepage.
 
-8. **Responsive Design**:
-   - User-friendly interface designed to be fully responsive across all devices.
-
-9. **Error Handling**:
-   - Proper error messages and loading indicators for a smooth user experience.
-
-10. **Secure Backend**:
-    - Utilizes secure APIs to handle data fetching and manipulation.
-
 ## Getting Started
 
 ### Prerequisites & Dependencies: 
@@ -75,4 +62,38 @@ Welcome to the RealEstate platform! This is a comprehensive solution for managin
 - sweetalert2
 - swiper
 - recaptha 
+
+
+## Technology Used: 
+- React
+- tailwindcss
+- daisyUI
+- Node.js
+- npm
+- vite
+- react
+- express.js
+- MongoDB
+- jwt
+- firebase
+- react-dom
+- react-router-dom
+- react-hook-form
+- axios
+- jsonwebtoken
+- cors
+- dotenv
+- tanstack/react-query
+- firebase
+- swiper
+- sweetalert2
+- swiper
+- recaptha 
+
+
+## How to run the project: 
+- clone the repo
+- npm i
+- add related dependencies 
+- npm run dev
 
